@@ -1,5 +1,6 @@
 pub mod all_api_hub;
 pub mod claude_code;
+pub mod claude_desktop;
 pub mod codex;
 pub mod image;
 pub mod mcp;

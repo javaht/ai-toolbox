@@ -26,7 +26,7 @@ export interface S3Config {
   public_domain: string;
 }
 
-export const SIDEBAR_PAGE_KEYS = ['opencode', 'claudecode', 'codex', 'openclaw'] as const;
+export const SIDEBAR_PAGE_KEYS = ['opencode', 'claude', 'claudecode', 'codex', 'openclaw'] as const;
 
 export type SidebarPageKey = typeof SIDEBAR_PAGE_KEYS[number];
 
@@ -40,6 +40,7 @@ type LegacySidebarVisibilityValue = boolean | {
 
 export const createDefaultSidebarHiddenByPage = (): SidebarHiddenByPage => ({
   opencode: false,
+  claude: false,
   claudecode: false,
   codex: false,
   openclaw: false,
@@ -125,7 +126,7 @@ export const defaultSettings: AppSettings = {
   auto_backup_max_keep: 10,
   last_auto_backup_time: null,
   auto_check_update: true,
-  visible_tabs: ['opencode', 'claudecode', 'codex', 'openclaw', 'image', 'ssh', 'wsl'],
+  visible_tabs: ['opencode', 'claude', 'claudecode', 'codex', 'openclaw', 'image', 'ssh', 'wsl'],
   sidebar_hidden_by_page: createDefaultSidebarHiddenByPage(),
 };
 

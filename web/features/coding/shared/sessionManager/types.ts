@@ -1,4 +1,4 @@
-export type SessionTool = 'codex' | 'claudecode' | 'openclaw' | 'opencode';
+export type SessionTool = 'codex' | 'claude' | 'claudecode' | 'openclaw' | 'opencode';
 
 export interface SessionMeta {
   providerId: SessionTool;

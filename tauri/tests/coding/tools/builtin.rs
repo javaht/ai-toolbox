@@ -1,6 +1,21 @@
 use ai_toolbox_lib::coding::tools::builtin_tool_by_key;
 
 #[test]
+fn claude_desktop_builtin_tool_uses_standard_desktop_mcp_config() {
+    let tool = builtin_tool_by_key("claude_desktop").expect("claude_desktop should exist");
+
+    assert_eq!(tool.display_name, "Claude");
+    assert_eq!(tool.relative_skills_dir, None);
+    assert_eq!(tool.relative_detect_dir, Some("%APPDATA%/Claude-3p"));
+    assert_eq!(
+        tool.mcp_config_path,
+        Some("%APPDATA%/Claude-3p/claude_desktop_config.json")
+    );
+    assert_eq!(tool.mcp_config_format, Some("json"));
+    assert_eq!(tool.mcp_field, Some("mcpServers"));
+}
+
+#[test]
 fn qoder_work_builtin_tool_uses_standard_mcp_servers_field() {
     let tool = builtin_tool_by_key("qoder_work").expect("qoder_work should exist");
 

@@ -1,4 +1,5 @@
 mod claude_code;
+mod claude_desktop;
 mod codex;
 mod open_claw;
 mod open_code;
@@ -13,6 +14,7 @@ use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::coding::claude_desktop::get_claude_desktop_root_dir_from_db_async;
 use crate::coding::runtime_location::{
     build_windows_unc_path, expand_home_from_user_root, get_claude_runtime_location_async,
     get_codex_runtime_location_async, get_openclaw_runtime_location_async,
@@ -27,6 +29,7 @@ const MAX_SESSION_PATH_LIMIT: usize = 500;
 const EXPORT_SCHEMA_VERSION: u8 = 2;
 const EXPORT_SCHEMA_NAME: &str = "ai-toolbox.session-export.v2";
 const SNAPSHOT_FORMAT_CODEX: &str = "codex-jsonl";
+const SNAPSHOT_FORMAT_CLAUDE_DESKTOP: &str = "claude-desktop-local-agent-session";
 const SNAPSHOT_FORMAT_CLAUDE_CODE: &str = "claudecode-project-session";
 const SNAPSHOT_FORMAT_OPENCLAW: &str = "openclaw-agent-session";
 const SNAPSHOT_FORMAT_OPENCODE: &str = "opencode-official-export";
@@ -126,6 +129,9 @@ enum ToolSessionContext {
     Codex {
         sessions_root: PathBuf,
     },
+    ClaudeDesktop {
+        sessions_root: PathBuf,
+    },
     ClaudeCode {
         projects_root: PathBuf,
     },
@@ -144,6 +150,7 @@ enum ToolSessionContext {
 #[derive(Debug, Clone, Copy)]
 enum SessionTool {
     Codex,
+    ClaudeDesktop,
     ClaudeCode,
     OpenClaw,
     OpenCode,
@@ -153,6 +160,7 @@ impl SessionTool {
     fn parse(raw: &str) -> Result<Self, String> {
         match raw {
             "codex" => Ok(Self::Codex),
+            "claude" | "claude_desktop" | "claudedesktop" => Ok(Self::ClaudeDesktop),
             "claudecode" | "claude_code" => Ok(Self::ClaudeCode),
             "openclaw" | "open_claw" => Ok(Self::OpenClaw),
             "opencode" | "open_code" => Ok(Self::OpenCode),
@@ -163,6 +171,7 @@ impl SessionTool {
     fn as_str(&self) -> &'static str {
         match self {
             Self::Codex => "codex",
+            Self::ClaudeDesktop => "claude",
             Self::ClaudeCode => "claudecode",
             Self::OpenClaw => "openclaw",
             Self::OpenCode => "opencode",
@@ -174,6 +183,9 @@ impl ToolSessionContext {
     fn cache_key(&self) -> String {
         match self {
             Self::Codex { sessions_root } => format!("codex:{}", sessions_root.display()),
+            Self::ClaudeDesktop { sessions_root } => {
+                format!("claude:{}", sessions_root.display())
+            }
             Self::ClaudeCode { projects_root } => {
                 format!("claudecode:{}", projects_root.display())
             }
@@ -433,6 +445,9 @@ fn delete_session_blocking(context: ToolSessionContext, source_path: String) -> 
         ToolSessionContext::Codex { .. } => {
             codex::delete_session(Path::new(&session.source_path))?;
         }
+        ToolSessionContext::ClaudeDesktop { .. } => {
+            claude_desktop::delete_session(Path::new(&session.source_path))?;
+        }
         ToolSessionContext::ClaudeCode { .. } => {
             claude_code::delete_session(Path::new(&session.source_path))?;
         }
@@ -468,6 +483,9 @@ fn delete_session_from_meta(
     match context {
         ToolSessionContext::Codex { .. } => {
             codex::delete_session(Path::new(&session.source_path))?;
+        }
+        ToolSessionContext::ClaudeDesktop { .. } => {
+            claude_desktop::delete_session(Path::new(&session.source_path))?;
         }
         ToolSessionContext::ClaudeCode { .. } => {
             claude_code::delete_session(Path::new(&session.source_path))?;
@@ -684,6 +702,17 @@ fn import_session_blocking(
                 &exported_file.native_snapshot.payload,
             )?;
         }
+        ToolSessionContext::ClaudeDesktop { sessions_root } => {
+            ensure_snapshot_format(
+                &exported_file.native_snapshot,
+                SNAPSHOT_FORMAT_CLAUDE_DESKTOP,
+            )?;
+            claude_desktop::import_native_snapshot(
+                sessions_root,
+                &exported_file.meta.session_id,
+                &exported_file.native_snapshot.payload,
+            )?;
+        }
         ToolSessionContext::ClaudeCode { projects_root } => {
             ensure_snapshot_format(&exported_file.native_snapshot, SNAPSHOT_FORMAT_CLAUDE_CODE)?;
             claude_code::import_native_snapshot(
@@ -762,6 +791,10 @@ fn build_native_snapshot(
         ToolSessionContext::Codex { sessions_root } => Ok(NativeSnapshot {
             format: SNAPSHOT_FORMAT_CODEX.to_string(),
             payload: codex::export_native_snapshot(sessions_root, Path::new(source_path))?,
+        }),
+        ToolSessionContext::ClaudeDesktop { sessions_root } => Ok(NativeSnapshot {
+            format: SNAPSHOT_FORMAT_CLAUDE_DESKTOP.to_string(),
+            payload: claude_desktop::export_native_snapshot(sessions_root, Path::new(source_path))?,
         }),
         ToolSessionContext::ClaudeCode { projects_root } => Ok(NativeSnapshot {
             format: SNAPSHOT_FORMAT_CLAUDE_CODE.to_string(),
@@ -859,6 +892,9 @@ fn ensure_snapshot_format(snapshot: &NativeSnapshot, expected: &str) -> Result<(
 fn scan_sessions(context: &ToolSessionContext) -> Vec<SessionMeta> {
     let mut sessions = match context {
         ToolSessionContext::Codex { sessions_root } => codex::scan_sessions(sessions_root),
+        ToolSessionContext::ClaudeDesktop { sessions_root } => {
+            claude_desktop::scan_sessions(sessions_root)
+        }
         ToolSessionContext::ClaudeCode { projects_root } => {
             claude_code::scan_sessions(projects_root)
         }
@@ -884,6 +920,9 @@ fn load_messages(
 ) -> Result<Vec<SessionMessage>, String> {
     match context {
         ToolSessionContext::Codex { .. } => codex::load_messages(Path::new(source_path)),
+        ToolSessionContext::ClaudeDesktop { .. } => {
+            claude_desktop::load_messages(Path::new(source_path))
+        }
         ToolSessionContext::ClaudeCode { .. } => claude_code::load_messages(Path::new(source_path)),
         ToolSessionContext::OpenClaw { .. } => open_claw::load_messages(Path::new(source_path)),
         ToolSessionContext::OpenCode { .. } => open_code::load_messages(source_path),
@@ -983,6 +1022,9 @@ fn scan_session_content_for_query(
         ToolSessionContext::Codex { .. } => {
             codex::scan_messages_for_query(Path::new(source_path), query_lower)
         }
+        ToolSessionContext::ClaudeDesktop { .. } => {
+            claude_desktop::scan_messages_for_query(Path::new(source_path), query_lower)
+        }
         ToolSessionContext::ClaudeCode { .. } => {
             claude_code::scan_messages_for_query(Path::new(source_path), query_lower)
         }
@@ -1033,6 +1075,12 @@ async fn resolve_context(
             let runtime_location = get_codex_runtime_location_async(db).await?;
             Ok(ToolSessionContext::Codex {
                 sessions_root: runtime_location.host_path.join("sessions"),
+            })
+        }
+        SessionTool::ClaudeDesktop => {
+            let root_dir = get_claude_desktop_root_dir_from_db_async(db).await?;
+            Ok(ToolSessionContext::ClaudeDesktop {
+                sessions_root: root_dir.join("local-agent-mode-sessions"),
             })
         }
         SessionTool::ClaudeCode => {

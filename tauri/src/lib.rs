@@ -1353,6 +1353,18 @@ pub fn run() {
             coding::claude_code::get_claude_onboarding_status,
             coding::claude_code::apply_claude_onboarding_skip,
             coding::claude_code::clear_claude_onboarding_skip,
+            // Claude Desktop
+            coding::claude_desktop::get_claude_desktop_config_path,
+            coding::claude_desktop::get_claude_desktop_root_path_info,
+            coding::claude_desktop::get_claude_desktop_common_config,
+            coding::claude_desktop::save_claude_desktop_common_config,
+            coding::claude_desktop::list_claude_desktop_providers,
+            coding::claude_desktop::create_claude_desktop_provider,
+            coding::claude_desktop::update_claude_desktop_provider,
+            coding::claude_desktop::delete_claude_desktop_provider,
+            coding::claude_desktop::apply_claude_desktop_config,
+            coding::claude_desktop::toggle_claude_desktop_provider_disabled,
+            coding::claude_desktop::reorder_claude_desktop_providers,
             // Preset Models
             coding::preset_models::fetch_remote_preset_models,
             coding::preset_models::load_cached_preset_models,

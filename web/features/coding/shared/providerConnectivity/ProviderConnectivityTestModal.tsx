@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ClaudeCodeProvider, ClaudeSettingsConfig } from '@/types/claudecode';
+import type { ClaudeDesktopProvider } from '@/types/claude';
 import type { CodexProvider, CodexSettingsConfig } from '@/types/codex';
 import type { OpenCodeProvider } from '@/types/opencode';
 import type { OpenCodeDiagnosticsConfig } from '@/services/opencodeApi';
@@ -81,6 +82,35 @@ export function buildClaudeProviderConnectivityInfo(
       models: buildProviderModels(uniqueModelIds),
     },
     modelIds: uniqueModelIds,
+  };
+}
+
+export function buildClaudeDesktopProviderConnectivityInfo(
+  provider: ClaudeDesktopProvider,
+): ProviderConnectivityInfo {
+  const modelIds = Array.from(
+    new Set(
+      (provider.inferenceModels || [])
+        .map((model) => model.name.trim())
+        .filter(Boolean),
+    ),
+  );
+
+  return {
+    providerId: provider.id,
+    providerName: provider.name,
+    providerConfig: {
+      npm: '@ai-sdk/anthropic',
+      name: provider.name,
+      options: {
+        baseURL: normalizeClaudeBaseUrl(provider.inferenceGatewayBaseUrl),
+        ...(provider.inferenceGatewayApiKey.trim()
+          ? { apiKey: provider.inferenceGatewayApiKey.trim() }
+          : {}),
+      },
+      models: buildProviderModels(modelIds),
+    },
+    modelIds,
   };
 }
 

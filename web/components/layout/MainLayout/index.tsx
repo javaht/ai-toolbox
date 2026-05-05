@@ -27,9 +27,13 @@ import { OpenClaw as OpenClawIcon } from '@lobehub/icons';
 
 const TAB_ICONS: Record<string, string> = {
   opencode: OpencodeIcon,
+  claude: ClaudeIcon,
   claudecode: ClaudeIcon,
   codex: ChatgptIcon,
 };
+
+const isPathActive = (pathname: string, tabPath: string) =>
+  pathname === tabPath || pathname.startsWith(`${tabPath}/`);
 
 // macOS Overlay 模式需要为交通灯按钮预留空间，Windows/Linux 使用原生标题栏
 const DRAG_BAR_HEIGHT = platform() === 'windows' || platform() === 'linux' ? 0 : 28; // px
@@ -85,7 +89,7 @@ const MainLayout: React.FC = () => {
   // Current active tab key
   const currentTabKey = React.useMemo(() => {
     for (const tab of subTabs) {
-      if (location.pathname.startsWith(tab.path)) {
+      if (isPathActive(location.pathname, tab.path)) {
         return tab.key;
       }
     }
@@ -95,7 +99,7 @@ const MainLayout: React.FC = () => {
   // Redirect to first visible tab when current path is a hidden coding tab
   React.useEffect(() => {
     if (isNonTabPage || subTabs.length === 0) return;
-    const isOnVisibleTab = subTabs.some((tab) => location.pathname.startsWith(tab.path));
+    const isOnVisibleTab = subTabs.some((tab) => isPathActive(location.pathname, tab.path));
     if (!isOnVisibleTab) {
       navigate(subTabs[0].path, { replace: true });
     }

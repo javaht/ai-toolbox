@@ -7,6 +7,17 @@ use super::types::{default_sidebar_hidden_by_page, AppSettings, S3Config, WebDAV
  */
 use serde_json::{json, Value};
 
+const DEFAULT_VISIBLE_TABS: &[&str] = &[
+    "opencode",
+    "claude",
+    "claudecode",
+    "codex",
+    "openclaw",
+    "image",
+    "ssh",
+    "wsl",
+];
+
 /// Convert database JSON Value to AppSettings with fault tolerance
 /// Missing fields will use default values, never panics
 pub fn from_db_value(value: Value) -> AppSettings {
@@ -32,19 +43,7 @@ pub fn from_db_value(value: Value) -> AppSettings {
         auto_backup_max_keep: get_u32(&value, "auto_backup_max_keep", 10),
         last_auto_backup_time: get_opt_str(&value, "last_auto_backup_time"),
         auto_check_update: get_bool(&value, "auto_check_update", true),
-        visible_tabs: get_string_array(
-            &value,
-            "visible_tabs",
-            &[
-                "opencode",
-                "claudecode",
-                "codex",
-                "openclaw",
-                "image",
-                "ssh",
-                "wsl",
-            ],
-        ),
+        visible_tabs: get_visible_tabs(&value),
         sidebar_hidden_by_page: get_sidebar_hidden_by_page(&value),
     }
 }
@@ -106,6 +105,25 @@ fn get_string_array(value: &Value, key: &str, defaults: &[&str]) -> Vec<String> 
         .unwrap_or_else(|| defaults.iter().map(|s| s.to_string()).collect())
 }
 
+fn get_visible_tabs(value: &Value) -> Vec<String> {
+    let mut tabs = get_string_array(value, "visible_tabs", DEFAULT_VISIBLE_TABS);
+    if tabs.iter().any(|tab| tab == "claude") {
+        return tabs;
+    }
+
+    let insert_at = tabs
+        .iter()
+        .position(|tab| tab == "claudecode")
+        .or_else(|| {
+            tabs.iter()
+                .position(|tab| tab == "opencode")
+                .map(|index| index + 1)
+        })
+        .unwrap_or(tabs.len());
+    tabs.insert(insert_at, "claude".to_string());
+    tabs
+}
+
 fn get_webdav(value: &Value) -> WebDAVConfig {
     let webdav = value.get("webdav");
 
@@ -151,7 +169,7 @@ fn get_sidebar_hidden_by_page(value: &Value) -> std::collections::HashMap<String
         .get("sidebar_hidden_by_page")
         .and_then(|v| v.as_object())
     {
-        for page_key in ["opencode", "claudecode", "codex", "openclaw"] {
+        for page_key in ["opencode", "claude", "claudecode", "codex", "openclaw"] {
             let Some(page_value) = sidebar_value.get(page_key).and_then(|v| v.as_bool()) else {
                 continue;
             };
@@ -167,7 +185,7 @@ fn get_sidebar_hidden_by_page(value: &Value) -> std::collections::HashMap<String
         return sidebar_hidden;
     };
 
-    for page_key in ["opencode", "claudecode", "codex", "openclaw"] {
+    for page_key in ["opencode", "claude", "claudecode", "codex", "openclaw"] {
         let Some(page_value) = legacy_sidebar_value.get(page_key) else {
             continue;
         };

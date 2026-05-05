@@ -12,6 +12,16 @@ use super::types::BuiltinTool;
 /// All built-in tool configurations
 /// Each tool can support Skills, MCP, or both
 pub const BUILTIN_TOOLS: &[BuiltinTool] = &[
+    // Claude Desktop - MCP only
+    BuiltinTool {
+        key: "claude_desktop",
+        display_name: "Claude",
+        relative_skills_dir: None,
+        relative_detect_dir: Some("%APPDATA%/Claude-3p"),
+        mcp_config_path: Some("%APPDATA%/Claude-3p/claude_desktop_config.json"),
+        mcp_config_format: Some("json"),
+        mcp_field: Some("mcpServers"),
+    },
     // Claude Code - supports both Skills and MCP
     BuiltinTool {
         key: "claude_code",

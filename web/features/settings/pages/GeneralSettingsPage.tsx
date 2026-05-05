@@ -67,7 +67,8 @@ const { Text } = Typography;
 
 const TOOL_LABEL_KEYS: Record<string, string> = {
   opencode: 'subModules.opencode',
-  claude: 'subModules.claudecode',
+  claude: 'subModules.claude',
+  claudecode: 'subModules.claudecode',
   codex: 'subModules.codex',
   openclaw: 'subModules.openclaw',
 };
@@ -617,7 +618,7 @@ const GeneralSettingsPage: React.FC = () => {
     </div>
   );
 
-  const CODING_TABS = ['opencode', 'claudecode', 'codex', 'openclaw'] as const;
+  const CODING_TABS = ['opencode', 'claude', 'claudecode', 'codex', 'openclaw'] as const;
   const OTHER_TABS = ['image', 'ssh', ...(isWindows ? ['wsl'] : [])] as string[];
 
   const [reorderMode, setReorderMode] = React.useState(false);

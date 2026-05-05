@@ -11,6 +11,7 @@
 		"notes": "Notes",
 		"opencode": "OpenCode",
 		"claudecode": "Claude Code",
+		"claude": "Claude Desktop",
 		"codex": "Codex",
 		"openclaw": "OpenClaw",
 		"image": "Image",
@@ -1520,6 +1521,102 @@
 			"outputLimit": "Output Limit",
 			"configNotFound": "auth.json config file not found",
 			"openConfigHint": "Click to open config file"
+		}
+	},
+	"claude": {
+		"title": "Claude Desktop Configuration",
+		"pageHint": "Manage local Claude Desktop provider profiles. Manage MCP servers from the MCP page by enabling the Claude target.",
+		"configPath": "Configuration File Path",
+		"openFolder": "Open Folder",
+		"refreshConfig": "Refresh",
+		"emptyText": "No Claude Desktop providers yet. Add one to get started.",
+		"commonConfigButton": "Common Config",
+		"settings": {
+			"title": "Claude Desktop Options"
+		},
+		"commonConfig": {
+			"title": "Claude Desktop Common Config",
+			"invalidJsonObject": "Common config must be a JSON object",
+			"combinedHint": "When applying a provider, AI Toolbox merges common config into the profile. Provider inference, Base URL, API key, and model list take priority."
+		},
+		"provider": {
+			"title": "Providers",
+			"addProvider": "Add Provider",
+			"editProvider": "Edit Provider",
+			"copyProvider": "Copy Provider",
+			"deleteProvider": "Delete Provider",
+			"confirmDelete": "Delete provider \"{{name}}\"?",
+			"mode": "Connection Mode",
+			"modeCustom": "Custom Endpoint",
+			"name": "Provider Name",
+			"nameRequired": "Enter a provider name",
+			"namePlaceholder": "e.g. My Claude Proxy",
+			"inferenceProvider": "Inference Provider",
+			"inferenceProviderRequired": "Enter an inference provider",
+			"baseUrl": "Base URL",
+			"baseUrlRequired": "Enter a Base URL",
+			"baseUrlPlaceholder": "e.g. https://api.example.com",
+			"apiKey": "API Key",
+			"apiKeyRequired": "Enter an API Key",
+			"apiKeyPlaceholder": "Enter API Key",
+			"models": "Models",
+			"modelPlaceholder": "e.g. MiniMax-M2.7",
+			"addModel": "Add Model",
+			"notes": "Notes",
+			"notesPlaceholder": "Optional notes",
+			"apply": "Apply",
+			"applied": "Applied",
+			"disabled": "Disabled",
+			"previewConfig": "Preview Claude Config"
+		},
+		"fetchModels": {
+			"button": "Fetch Models",
+			"openaiCompat": "OpenAI compatible",
+			"native": "Anthropic native",
+			"baseUrlRequired": "Enter a Base URL first",
+				"success": "Fetched {{count}} model(s)",
+				"fallbackSuccess": "Automatically switched to OpenAI compatible and fetched {{count}} model(s)",
+				"noModels": "No models found",
+				"failed": "Failed to fetch models",
+				"loaded": "{{count}} model(s) loaded"
+			},
+			"model": {
+				"defaultModel": "Default Model",
+				"defaultModelPlaceholder": "claude-sonnet-4-5-20250929",
+				"haikuModel": "Haiku Model",
+				"haikuModelPlaceholder": "claude-haiku-4-5-20251001",
+				"sonnetModel": "Sonnet Model",
+				"sonnetModelPlaceholder": "claude-sonnet-4-5-20250929",
+				"opusModel": "Opus Model",
+				"opusModelPlaceholder": "claude-opus-4-5-20251101",
+				"reasoningModel": "Reasoning Model",
+				"reasoningModelPlaceholder": "claude-sonnet-4-5-thinking-20251001"
+			},
+			"apply": {
+				"success": "Claude configuration applied"
+			},
+		"rootPathSource": {
+			"customize": "Custom Data Directory",
+			"modal": {
+				"title": "Custom Claude Desktop Data Directory",
+				"currentSource": "Current Source",
+				"sourceCustom": "In-app Setting",
+				"sourceEnv": "Environment Variable",
+				"sourceShell": "Shell Config",
+				"sourceDefault": "Auto-detected",
+				"customPath": "Data Directory",
+				"reset": "Reset to Auto-detect",
+				"description": "Claude Desktop configLibrary and claude_desktop_config.json are derived from this directory.",
+				"envWarningTitle": "AI Toolbox Only",
+				"envWarningDesc": "The in-app custom path only affects where AI Toolbox reads and writes. It does not change Claude Desktop's own data directory.",
+				"envHint": "Current path: {{path}}",
+				"shellHint": "Current path: {{path}}",
+				"placeholder": "Enter or select Claude Desktop data directory",
+				"saveSuccess": "Claude Desktop data directory saved",
+				"resetSuccess": "Reset to auto-detect",
+				"folderOnlyTitle": "Select a folder",
+				"folderOnlyDesc": "Do not select a file. AI Toolbox derives configLibrary and claude_desktop_config.json inside this folder."
+			}
 		}
 	},
 	"claudecode": {

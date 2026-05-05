@@ -11,6 +11,7 @@
 		"notes": "笔记",
 		"opencode": "OpenCode",
 		"claudecode": "Claude Code",
+		"claude": "Claude Desktop",
 		"codex": "Codex",
 		"openclaw": "OpenClaw",
 		"image": "Image",
@@ -1517,6 +1518,102 @@
 			"outputLimit": "输出限制",
 			"configNotFound": "未找到 auth.json 配置文件",
 			"openConfigHint": "点击打开配置文件"
+		}
+	},
+	"claude": {
+		"title": "Claude Desktop 配置管理",
+		"pageHint": "管理 Claude Desktop 的本地供应商配置。MCP 服务器请在 MCP 页面勾选 Claude 同步。",
+		"configPath": "配置文件路径",
+		"openFolder": "打开文件夹",
+		"refreshConfig": "刷新配置",
+		"emptyText": "暂无 Claude Desktop 供应商配置，点击上方按钮添加。",
+		"commonConfigButton": "通用配置",
+		"settings": {
+			"title": "Claude Desktop 更多选项"
+		},
+		"commonConfig": {
+			"title": "Claude Desktop 通用配置",
+			"invalidJsonObject": "通用配置必须是 JSON 对象",
+			"combinedHint": "应用供应商时会把通用配置与供应商配置合并写入 profile，供应商的推理供应商、Base URL、API Key 和模型列表优先。"
+		},
+		"provider": {
+			"title": "供应商列表",
+			"addProvider": "添加供应商",
+			"editProvider": "编辑供应商",
+			"copyProvider": "复制供应商",
+			"deleteProvider": "删除供应商",
+			"confirmDelete": "确定要删除供应商 \"{{name}}\" 吗？",
+			"mode": "连接方式",
+			"modeCustom": "自定义渠道",
+			"name": "供应商名称",
+			"nameRequired": "请输入供应商名称",
+			"namePlaceholder": "如：我的 Claude 代理",
+			"inferenceProvider": "推理供应商",
+			"inferenceProviderRequired": "请输入推理供应商",
+			"baseUrl": "Base URL",
+			"baseUrlRequired": "请输入 Base URL",
+			"baseUrlPlaceholder": "如：https://api.example.com",
+			"apiKey": "API Key",
+			"apiKeyRequired": "请输入 API Key",
+			"apiKeyPlaceholder": "输入 API Key",
+			"models": "模型",
+			"modelPlaceholder": "如：MiniMax-M2.7",
+			"addModel": "添加模型",
+			"notes": "备注",
+			"notesPlaceholder": "可选备注",
+			"apply": "应用",
+			"applied": "已应用",
+			"disabled": "已禁用",
+			"previewConfig": "预览 Claude 配置"
+		},
+		"fetchModels": {
+			"button": "获取模型列表",
+			"openaiCompat": "OpenAI 兼容",
+			"native": "Anthropic 原生",
+			"baseUrlRequired": "请先输入 Base URL",
+				"success": "成功获取 {{count}} 个模型",
+				"fallbackSuccess": "已自动切换为 OpenAI 兼容，成功获取 {{count}} 个模型",
+				"noModels": "未获取到模型",
+				"failed": "获取模型列表失败",
+				"loaded": "已加载 {{count}} 个模型"
+			},
+			"model": {
+				"defaultModel": "默认模型",
+				"defaultModelPlaceholder": "claude-sonnet-4-5-20250929",
+				"haikuModel": "Haiku模型",
+				"haikuModelPlaceholder": "claude-haiku-4-5-20251001",
+				"sonnetModel": "Sonnet模型",
+				"sonnetModelPlaceholder": "claude-sonnet-4-5-20250929",
+				"opusModel": "Opus模型",
+				"opusModelPlaceholder": "claude-opus-4-5-20251101",
+				"reasoningModel": "思考模型",
+				"reasoningModelPlaceholder": "claude-sonnet-4-5-thinking-20251001"
+			},
+			"apply": {
+				"success": "Claude 配置应用成功"
+			},
+		"rootPathSource": {
+			"customize": "自定义数据目录",
+			"modal": {
+				"title": "自定义 Claude Desktop 数据目录",
+				"currentSource": "当前来源",
+				"sourceCustom": "应用内设置",
+				"sourceEnv": "环境变量",
+				"sourceShell": "Shell 配置",
+				"sourceDefault": "自动探测",
+				"customPath": "数据目录",
+				"reset": "重置为自动探测",
+				"description": "Claude Desktop 的 configLibrary 和 claude_desktop_config.json 都会从这个目录派生。",
+				"envWarningTitle": "只影响 AI Toolbox",
+				"envWarningDesc": "应用内自定义路径只影响 AI Toolbox 的读写位置，不会修改 Claude Desktop 自身的数据目录。",
+				"envHint": "当前路径: {{path}}",
+				"shellHint": "当前路径: {{path}}",
+				"placeholder": "输入或选择 Claude Desktop 数据目录",
+				"saveSuccess": "Claude Desktop 数据目录已保存",
+				"resetSuccess": "已重置为自动探测",
+				"folderOnlyTitle": "请选择文件夹",
+				"folderOnlyDesc": "不要选择具体文件，AI Toolbox 会在所选文件夹下派生 configLibrary 和 claude_desktop_config.json。"
+			}
 		}
 	},
 	"claudecode": {

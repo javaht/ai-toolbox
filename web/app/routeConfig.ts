@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 import { NotesPage } from '@/features/daily';
-import { OpenCodePage, ClaudeCodePage, CodexPage } from '@/features/coding';
+import { OpenCodePage, ClaudePage, ClaudeCodePage, CodexPage } from '@/features/coding';
 import { OpenClawPage } from '@/features/coding/openclaw';
 import { SettingsPage } from '@/features/settings';
 import { SkillsPage } from '@/features/coding/skills';
@@ -26,6 +26,7 @@ export const PAGE_ROUTES: RouteEntry[] = [
   { path: '/daily/notes', component: NotesPage },
   { path: '/coding/opencode', component: OpenCodePage },
   { path: '/coding/claudecode', component: ClaudeCodePage },
+  { path: '/coding/claude', component: ClaudePage },
   { path: '/coding/codex', component: CodexPage },
   { path: '/coding/openclaw', component: OpenClawPage },
   { path: '/settings', component: SettingsPage },

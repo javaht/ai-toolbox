@@ -90,6 +90,7 @@ impl Default for AppSettings {
             auto_check_update: true,
             visible_tabs: vec![
                 "opencode".to_string(),
+                "claude".to_string(),
                 "claudecode".to_string(),
                 "codex".to_string(),
                 "openclaw".to_string(),
@@ -105,6 +106,7 @@ impl Default for AppSettings {
 pub fn default_sidebar_hidden_by_page() -> HashMap<String, bool> {
     HashMap::from([
         ("opencode".to_string(), false),
+        ("claude".to_string(), false),
         ("claudecode".to_string(), false),
         ("codex".to_string(), false),
         ("openclaw".to_string(), false),

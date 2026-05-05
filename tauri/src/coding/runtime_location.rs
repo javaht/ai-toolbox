@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::coding::open_code::shell_env;
-use crate::coding::{claude_code, codex, open_claw, open_code};
+use crate::coding::{claude_code, claude_desktop, codex, open_claw, open_code};
 
 const MODULE_KEYS: [&str; 4] = ["opencode", "claude", "codex", "openclaw"];
 const OMO_LEGACY_BASENAME: &str = "oh-my-opencode";
@@ -1078,6 +1078,7 @@ pub fn get_tool_mcp_config_path_sync(
 ) -> Option<PathBuf> {
     match tool_key {
         "claude_code" => get_claude_mcp_config_path_sync(db).ok(),
+        "claude_desktop" => claude_desktop::get_claude_desktop_mcp_config_path_sync().ok(),
         "codex" => get_codex_config_path_sync(db).ok(),
         "opencode" => get_opencode_runtime_location_sync(db)
             .ok()
@@ -1095,6 +1096,9 @@ pub async fn get_tool_mcp_config_path_async(
 ) -> Option<PathBuf> {
     match tool_key {
         "claude_code" => get_claude_mcp_config_path_async(db).await.ok(),
+        "claude_desktop" => claude_desktop::get_claude_desktop_mcp_config_path_async(db)
+            .await
+            .ok(),
         "codex" => get_codex_config_path_async(db).await.ok(),
         "opencode" => get_opencode_runtime_location_async(db)
             .await
